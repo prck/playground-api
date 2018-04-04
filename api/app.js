@@ -9,6 +9,7 @@ const { mongoose } = require('./db/mongoose');
 const boardsRoutes = require('./routes/boards')
 const cardsRoutes = require('./routes/cards')
 const commentsRoutes = require('./routes/comments')
+const listsRoutes = require('./routes/Lists')
 
 app.use(morgan("dev"));
 app.use('../uploads', express.static('../uploads'));
@@ -30,6 +31,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/boards", boardsRoutes);
+app.use("/boards/:boardId/lists", listsRoutes);
 app.use("/cards/:cardId/comments", commentsRoutes);
 app.use("/cards", cardsRoutes);
 

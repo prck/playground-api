@@ -30,9 +30,9 @@ exports.readComment = (req, res) => {
 exports.createComment = (req, res) => {
   const comment = new Comment({
     _id: new mongoose.Types.ObjectId(),
-    libelle: req.body.libelle,
-    dateDebut: req.body.dateDebut,
-    dateFin: req.body.dateFin
+    name: req.body.name,
+    text: req.body.text,
+    creationDate: req.body.creationDate
   });
   comment
     .save()

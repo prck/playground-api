@@ -28,12 +28,14 @@ exports.readBoard = (req, res) => {
 
 /** POST /boards */
 exports.createBoard = (req, res) => {
+  console.log(req.body);
   const board = new Board({
     _id: new mongoose.Types.ObjectId(),
-    libelle: req.body.libelle,
-    dateDebut: req.body.dateDebut,
-    dateFin: req.body.dateFin
+    name: req.body.name,
+    text: req.body.text,
+    creationDate: req.body.creationDate
   });
+  console.log(board);
   board
     .save()
     .then(doc => res.status(201).json({ message: "Created board successfully", board: doc }))

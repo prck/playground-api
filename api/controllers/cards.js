@@ -30,9 +30,9 @@ exports.readCard = (req, res) => {
 exports.createCard = (req, res) => {
   const card = new Card({
     _id: new mongoose.Types.ObjectId(),
-    libelle: req.body.libelle,
-    dateDebut: req.body.dateDebut,
-    dateFin: req.body.dateFin
+    name: req.body.name,
+    text: req.body.text,
+    creationDate: req.body.creationDate
   });
   card
     .save()
