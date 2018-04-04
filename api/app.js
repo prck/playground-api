@@ -6,9 +6,9 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const { mongoose } = require('./db/mongoose');
 
-// const userRoutes = require('./routes/user')
-// const entreprisesRoutes = require('./routes/entreprises')
-const dossiersRoutes = require('./routes/dossiers')
+const boardsRoutes = require('./routes/boards')
+const cardsRoutes = require('./routes/cards')
+const commentsRoutes = require('./routes/comments')
 
 app.use(morgan("dev"));
 app.use('../uploads', express.static('../uploads'));
@@ -29,9 +29,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use("/user", userRoutes);
-// app.use("/entreprises", entreprisesRoutes);
-app.use("/dossiers", dossiersRoutes);
+app.use("/boards", boardsRoutes);
+app.use("/cards/:cardId/comments", commentsRoutes);
+app.use("/cards", cardsRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Not found");
