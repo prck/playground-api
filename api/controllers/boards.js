@@ -44,9 +44,7 @@ exports.createBoard = (req, res) => {
   const board = new Board({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
-    text: req.body.text,
-    creationDate: req.body.creationDate,
-    lists: []
+    text: req.body.text
   });
   board
     .save()
@@ -78,7 +76,7 @@ exports.partialUpdateBoard = (req, res) => {
 exports.deleteBoard = (req, res) => {
   const boardId = req.params.boardId;
   Board
-    .findByIdAndRemove(boardId)
+    .findOneAndRemove(boardId)
     .exec()
     .then(doc => {
       if (doc) {
@@ -91,18 +89,20 @@ exports.deleteBoard = (req, res) => {
 }
 
 /** PUT /boards/:boardId */
-// exports.updateBoard = (req, res) => {
-//   const boardId = req.params.boardId;
-//   var board = _.pick(req.body, ['libelle', 'dateDebut', 'dateFin']);
-//   Board
-//     .findByIdAndUpdate(boardId, { $set: board }, { new: true })
-//     .exec()
-//     .then(doc => {
-//       if (doc) {
-//         res.status(200).json({ message: "Board updated", board: doc, });
-//       } else {
-//         res.status(404).json({ message: 'No valid entry found for provided ID' });
-//       }
-//     })
-//     .catch(err => res.status(500).json({ error: err }));
-// }
+/*
+exports.updateBoard = (req, res) => {
+  const boardId = req.params.boardId;
+  var board = _.pick(req.body, ['libelle', 'dateDebut', 'dateFin']);
+  Board
+    .findByIdAndUpdate(boardId, { $set: board }, { new: true })
+    .exec()
+    .then(doc => {
+      if (doc) {
+        res.status(200).json({ message: "Board updated", board: doc, });
+      } else {
+        res.status(404).json({ message: 'No valid entry found for provided ID' });
+      }
+    })
+    .catch(err => res.status(500).json({ error: err }));
+}
+*/

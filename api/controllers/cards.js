@@ -8,6 +8,8 @@ exports.readCard = (req, res) => {
   const cardId = req.params.cardId;
   Card
     .findById(cardId)
+    .populate('comments')
+    .populate('userIdCreator')
     .exec()
     .then(doc => {
       if (doc) {
@@ -26,7 +28,6 @@ exports.createCard = (req, res) => {
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     text: req.body.text,
-    creationDate: req.body.creationDate
   });
   List
     .findByIdAndUpdate(listId, { $push: { cards: card._id } }, { new: true })
