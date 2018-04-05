@@ -1,4 +1,4 @@
-var Board = require('../models/board');
+const Board = require('../models/board');
 const mongoose = require("mongoose");
 const _ = require('lodash')
 
@@ -6,6 +6,7 @@ const _ = require('lodash')
 exports.listBoards = (req, res) => {
   Board
     .find()
+    .populate('userIdCreator')
     .then(doc => res.status(200).json({ boards: doc }))
     .catch(err => res.status(400).json({ error: err }));
 }
@@ -15,6 +16,18 @@ exports.readBoard = (req, res) => {
   const boardId = req.params.boardId;
   Board
     .findById(boardId)
+    .populate({
+      path: 'lists',
+      populate: [{
+        path: 'cards',
+        populate: {
+          path: 'userIdCreator'
+        }
+      }, {
+        path: 'userIdCreator'
+      }]
+    })
+    .populate('userIdCreator')
     .exec()
     .then(doc => {
       if (doc) {
@@ -28,14 +41,13 @@ exports.readBoard = (req, res) => {
 
 /** POST /boards */
 exports.createBoard = (req, res) => {
-  console.log(req.body);
   const board = new Board({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     text: req.body.text,
-    creationDate: req.body.creationDate
+    creationDate: req.body.creationDate,
+    lists: []
   });
-  console.log(board);
   board
     .save()
     .then(doc => res.status(201).json({ message: "Created board successfully", board: doc }))
@@ -62,27 +74,9 @@ exports.partialUpdateBoard = (req, res) => {
     .catch(err => res.status(500).json({ error: err }));
 }
 
-/** PUT /boards/:boardId */
-exports.updateBoard = (req, res) => {
-  const boardId = req.params.boardId;
-  var board = _.pick(req.body, ['libelle', 'dateDebut', 'dateFin']);
-  Board
-    .findByIdAndUpdate(boardId, { $set: board }, { new: true })
-    .exec()
-    .then(doc => {
-      if (doc) {
-        res.status(200).json({ message: "Board updated", board: doc, });
-      } else {
-        res.status(404).json({ message: 'No valid entry found for provided ID' });
-      }
-    })
-    .catch(err => res.status(500).json({ error: err }));
-}
-
 /** DELETE /boards/:boardId */
 exports.deleteBoard = (req, res) => {
   const boardId = req.params.boardId;
-  console.log(boardId);
   Board
     .findByIdAndRemove(boardId)
     .exec()
@@ -95,3 +89,20 @@ exports.deleteBoard = (req, res) => {
     })
     .catch(err => res.status(500).json({ error: err }));
 }
+
+/** PUT /boards/:boardId */
+// exports.updateBoard = (req, res) => {
+//   const boardId = req.params.boardId;
+//   var board = _.pick(req.body, ['libelle', 'dateDebut', 'dateFin']);
+//   Board
+//     .findByIdAndUpdate(boardId, { $set: board }, { new: true })
+//     .exec()
+//     .then(doc => {
+//       if (doc) {
+//         res.status(200).json({ message: "Board updated", board: doc, });
+//       } else {
+//         res.status(404).json({ message: 'No valid entry found for provided ID' });
+//       }
+//     })
+//     .catch(err => res.status(500).json({ error: err }));
+// }

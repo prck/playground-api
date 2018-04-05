@@ -8,7 +8,7 @@ router.get("/", BoardsController.listBoards)
 router.get("/:boardId", BoardsController.readBoard)
 router.delete("/:boardId", BoardsController.deleteBoard)
 router.patch("/:boardId", BoardsController.partialUpdateBoard)
-router.put("/:boardId", BoardsController.updateBoard)
+// router.put("/:boardId", BoardsController.updateBoard)
 router.post("/", BoardsController.createBoard)
 
 module.exports = router;

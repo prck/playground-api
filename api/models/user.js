@@ -12,7 +12,7 @@ const UserSchema = mongoose.Schema({
   },
   password: { type: String, required: true },
   fullName: { type: String, required: true },
-  avatarHash: { type: String, required: true },
+  avatarHash: { type: String },
 })
 
 UserSchema.methods.toJSON = function() {

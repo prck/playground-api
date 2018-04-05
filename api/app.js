@@ -10,6 +10,7 @@ const boardsRoutes = require('./routes/boards')
 const cardsRoutes = require('./routes/cards')
 const commentsRoutes = require('./routes/comments')
 const listsRoutes = require('./routes/Lists')
+const userRoutes = require('./routes/user')
 
 app.use(morgan("dev"));
 app.use('../uploads', express.static('../uploads'));
@@ -30,10 +31,11 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/boards", boardsRoutes);
-app.use("/boards/:boardId/lists", listsRoutes);
+app.use('/user', userRoutes)
 app.use("/cards/:cardId/comments", commentsRoutes);
-app.use("/cards", cardsRoutes);
+app.use("/lists/:listId/cards", cardsRoutes);
+app.use("/boards/:boardId/lists", listsRoutes);
+app.use("/boards", boardsRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Not found");
