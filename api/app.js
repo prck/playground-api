@@ -4,32 +4,23 @@ const express = require('express');
 const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-const { mongoose } = require('./db/mongoose');
+const cors = require("cors");
+const helmet = require('helmet');
 
+const { mongoose } = require('./db/mongoose');
 const boardsRoutes = require('./routes/boards')
 const cardsRoutes = require('./routes/cards')
 const commentsRoutes = require('./routes/comments')
 const listsRoutes = require('./routes/Lists')
 const userRoutes = require('./routes/user')
 
+app.use(helmet());
 app.use(morgan("dev"));
-app.use('../uploads', express.static('../uploads'));
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-// http://expressjs.com/fr/guide/using-middleware.html
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-    return res.status(200).json({});
-  }
-  next();
-});
+// app.use('../uploads', express.static('../uploads'));
 
 app.use('/user', userRoutes)
 app.use("/cards/:cardId/comments", commentsRoutes);
