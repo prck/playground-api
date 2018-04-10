@@ -7,7 +7,7 @@ const _ = require('lodash')
 exports.deleteComment = (req, res) => {
   const commentId = req.params.commentId;
   Comment
-    .findByIdAndRemove(commentId)
+    .findOneAndRemove({ id: commentId })
     .exec()
     .then(doc => {
       if (doc) {
@@ -27,7 +27,7 @@ exports.partialUpdateComment = (req, res) => {
     updateOps[ops.propName] = ops.value;
   }
   Comment
-    .findByIdAndUpdate(commentId, { $set: updateOps }, { new: true })
+    .findOneAndUpdate({ id: commentId }, { $set: updateOps }, { new: true })
     .exec()
     .then(doc => {
       if (doc) {
@@ -48,7 +48,7 @@ exports.createComment = (req, res) => {
     text: req.body.text
   });
   Card
-    .findByIdAndUpdate(cardId, { $push: { comments: comment._id } }, { new: true })
+    .findOneAndUpdate({ id: cardId }, { $push: { comments: comment._id } }, { new: true })
     .exec()
     .then(doc => {
       if (doc) {

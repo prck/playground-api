@@ -7,7 +7,7 @@ const _ = require('lodash')
 exports.deleteList = (req, res) => {
   const listId = req.params.listId;
   List
-    .findByIdAndRemove(listId)
+    .findOneAndRemove({ id: listId })
     .exec()
     .then(doc => {
       if (doc) {
@@ -27,7 +27,7 @@ exports.partialUpdateList = (req, res) => {
     updateOps[ops.propName] = ops.value;
   }
   List
-    .findByIdAndUpdate(listId, { $set: updateOps }, { new: true })
+    .findOneAndUpdate({ id: listId }, { $set: updateOps }, { new: true })
     .exec()
     .then(doc => {
       if (doc) {
@@ -46,10 +46,9 @@ exports.createList = (req, res) => {
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     text: req.body.text,
-    creationDate: req.body.creationDate
   });
   Board
-    .findByIdAndUpdate(boardId, { $push: { lists: list._id } }, { new: true })
+    .findOneAndUpdate({ id: boardId }, { $push: { lists: list._id } }, { new: true })
     .exec()
     .then(doc => {
       if (doc) {

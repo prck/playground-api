@@ -7,7 +7,7 @@ const _ = require('lodash')
 exports.readCard = (req, res) => {
   const cardId = req.params.cardId;
   Card
-    .findById(cardId)
+    .findOne({ id: cardId })
     .populate('comments')
     .populate('userIdCreator')
     .exec()
@@ -24,13 +24,15 @@ exports.readCard = (req, res) => {
 /** POST /cards */
 exports.createCard = (req, res) => {
   const listId = req.params.listId;
+  // const listId = req.body.listId;
+  console.log(listId);
   const card = new Card({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     text: req.body.text,
   });
   List
-    .findByIdAndUpdate(listId, { $push: { cards: card._id } }, { new: true })
+    .findOneAndUpdate({ id: listId }, { $push: { cards: card._id } }, { new: true })
     .exec()
     .then(doc => {
       if (doc) {
@@ -45,15 +47,24 @@ exports.createCard = (req, res) => {
     .catch(err => res.status(500).json({ error: err }));
 }
 
+/**
+ * name
+ * text
+ * orderId
+ * transfert list
+ */
+
 /** PATCH /cards/:cardId */
 exports.partialUpdateCard = (req, res) => {
   const cardId = req.params.cardId;
+  const previousCardId = req.params.previousCardId;
   const updateOps = {};
   for (const ops of req.body) {
     updateOps[ops.propName] = ops.value;
   }
+  List
   Card
-    .findByIdAndUpdate(cardId, { $set: updateOps }, { new: true })
+    .findOneAndUpdate({ id: cardId }, { $set: updateOps }, { new: true })
     .exec()
     .then(doc => {
       if (doc) {
@@ -69,7 +80,7 @@ exports.partialUpdateCard = (req, res) => {
 exports.deleteCard = (req, res) => {
   const cardId = req.params.cardId;
   Card
-    .findByIdAndRemove(cardId)
+    .findOnedAndRemove({ id: cardId })
     .exec()
     .then(doc => {
       if (doc) {

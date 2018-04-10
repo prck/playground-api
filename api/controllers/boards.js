@@ -15,7 +15,7 @@ exports.listBoards = (req, res) => {
 exports.readBoard = (req, res) => {
   const boardId = req.params.boardId;
   Board
-    .findById(boardId)
+    .findOne({ id: boardId })
     .populate({
       path: 'lists',
       populate: [{
@@ -60,7 +60,7 @@ exports.partialUpdateBoard = (req, res) => {
     updateOps[ops.propName] = ops.value;
   }
   Board
-    .findByIdAndUpdate(boardId, { $set: updateOps }, { new: true })
+    .findOneAndUpdate({ id: boardId }, { $set: updateOps }, { new: true })
     .exec()
     .then(doc => {
       if (doc) {
@@ -76,7 +76,7 @@ exports.partialUpdateBoard = (req, res) => {
 exports.deleteBoard = (req, res) => {
   const boardId = req.params.boardId;
   Board
-    .findOneAndRemove(boardId)
+    .findOneAndRemove({ id: boardId })
     .exec()
     .then(doc => {
       if (doc) {
