@@ -62,7 +62,6 @@ exports.partialUpdateCard = (req, res) => {
   for (const ops of req.body) {
     updateOps[ops.propName] = ops.value;
   }
-  List
   Card
     .findOneAndUpdate({ id: cardId }, { $set: updateOps }, { new: true })
     .exec()
