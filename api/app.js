@@ -23,9 +23,9 @@ app.use(bodyParser.json());
 // app.use('../uploads', express.static('../uploads'));
 
 app.use('/user', userRoutes)
-app.use("/cards/:cardId/comments", commentsRoutes);
-app.use("/lists/:listId/cards", cardsRoutes);
-app.use("/boards/:boardId/lists", listsRoutes);
+app.use("/comments", commentsRoutes);
+app.use("/cards", cardsRoutes);
+app.use("/lists", listsRoutes);
 app.use("/boards", boardsRoutes);
 
 app.use((req, res, next) => {

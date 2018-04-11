@@ -41,7 +41,7 @@ exports.partialUpdateComment = (req, res) => {
 
 /** POST /cards/:cardId/comments */
 exports.createComment = (req, res) => {
-  const cardId = req.params.cardId;
+  const cardId = req.body.cardId;
   const comment = new Comment({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,

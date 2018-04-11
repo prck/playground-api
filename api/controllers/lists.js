@@ -41,7 +41,7 @@ exports.partialUpdateList = (req, res) => {
 
 /** POST /lists */
 exports.createList = (req, res) => {
-  const boardId = req.params.boardId;
+  const boardId = req.body.boardId;
   const list = new List({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
