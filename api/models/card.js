@@ -13,11 +13,11 @@ const CardSchema = mongoose.Schema({
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }]
 })
 
-CardSchema.methods.toJSON = function() {
-  var card = this
-  var cardObject = card.toObject()
-  return _.pick(cardObject, ['id', 'name', 'text', 'creationDate', 'userIdCreator', 'comments', 'orderId'])
-}
+// CardSchema.methods.toJSON = function() {
+//   var card = this
+//   var cardObject = card.toObject()
+//   return _.pick(cardObject, ['id', 'name', 'text', 'creationDate', 'userIdCreator', 'comments', 'orderId'])
+// }
 
 CardSchema.post('findOneAndRemove', function(doc) {
   // var boardObject = board.toObject()

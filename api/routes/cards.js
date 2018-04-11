@@ -8,5 +8,6 @@ router.delete("/:cardId", CardsController.deleteCard)
 router.patch("/:cardId", CardsController.partialUpdateCard)
 router.post("/", CardsController.createCard)
 router.get("/:cardId", CardsController.readCard)
+router.put("/:cardId", CardsController.updateCard)
 
 module.exports = router;

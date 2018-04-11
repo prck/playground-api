@@ -23,9 +23,7 @@ exports.readCard = (req, res) => {
 
 /** POST /cards */
 exports.createCard = (req, res) => {
-  const listId = req.params.listId;
-  // const listId = req.body.listId;
-  console.log(listId);
+  const listId = req.body.listId;
   const card = new Card({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
@@ -53,14 +51,67 @@ exports.createCard = (req, res) => {
  * orderId
  * transfert list
  */
+/** PUT /cards/:cardId */
+exports.updateCard = (req, res) => {
+  const cardId = req.params.cardId;
+  const updateOps = {};
+  for (const ops of req.body) {
+    if (ops.propName !== "id") {
+      updateOps[ops.propName] = ops.value;
+    }
+  }
+  Card
+    .findOne({ id: cardId })
+    .then(doc => {
+      if (doc) {
+        const cardObjectId = doc._id
+        List
+          .findOneAndUpdate({ id: updateOps.previousListId }, {
+            $pullAll: { cards: [cardObjectId] }
+          }, {
+            new: true
+          })
+          .exec()
+          .then(doc => {
+            if (doc) {
+              List.findOneAndUpdate({ id: updateOps.listId }, {
+                  $push: {
+                    cards: {
+                      $each: [cardObjectId],
+                      $position: updateOps.index
+                    }
+                  }
+                }, { new: true })
+                .exec()
+                .then(doc => {
+                  if (doc) {
+                    res.status(200).json({ message: "Card partially updated", card: doc, });
+                  } else {
+                    res.status(404).json({ message: 'No valid entry found for provided ID' });
+                  }
+                })
+                .catch(err => res.status(500).json({ error: err }));
+              res.status(200).json({ message: "Card partially updated", card: doc, });
+            } else {
+              res.status(404).json({ message: 'No valid entry found for provided ID' });
+            }
+          })
+          .catch(err => res.status(500).json({ error: err }));
+      } else {
+        res.status(404).json({ message: 'No valid entry found for provided ID' });
+      }
+    })
+    .catch(err => res.status(500).json({ error: err }));
+}
 
 /** PATCH /cards/:cardId */
 exports.partialUpdateCard = (req, res) => {
   const cardId = req.params.cardId;
-  const previousCardId = req.params.previousCardId;
   const updateOps = {};
   for (const ops of req.body) {
-    updateOps[ops.propName] = ops.value;
+    if (ops.propName !== "id") {
+      updateOps[ops.propName] = ops.value;
+    }
   }
   Card
     .findOneAndUpdate({ id: cardId }, { $set: updateOps }, { new: true })
