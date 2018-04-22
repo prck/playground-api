@@ -62,9 +62,9 @@ exports.updateCard = (req, res) => {
   }
   Card
     .findOne({ id: cardId })
-    .then(doc => {
-      if (doc) {
-        const cardObjectId = doc._id
+    .then(card => {
+      if (card) {
+        const cardObjectId = card._id
         List
           .findOneAndUpdate({ id: updateOps.previousListId }, {
             $pullAll: { cards: [cardObjectId] }
@@ -85,13 +85,12 @@ exports.updateCard = (req, res) => {
                 .exec()
                 .then(doc => {
                   if (doc) {
-                    res.status(200).json({ message: "Card partially updated", card: doc, });
+                    res.status(200).json({ message: "Card partially updated", card: card, });
                   } else {
                     res.status(404).json({ message: 'No valid entry found for provided ID' });
                   }
                 })
                 .catch(err => res.status(500).json({ error: err }));
-              res.status(200).json({ message: "Card partially updated", card: doc, });
             } else {
               res.status(404).json({ message: 'No valid entry found for provided ID' });
             }
