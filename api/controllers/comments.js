@@ -44,7 +44,6 @@ exports.createComment = (req, res) => {
   const cardId = req.body.cardId;
   const comment = new Comment({
     _id: new mongoose.Types.ObjectId(),
-    name: req.body.name,
     text: req.body.text
   });
   Card

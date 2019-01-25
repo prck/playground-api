@@ -44,7 +44,6 @@ exports.createList = (req, res) => {
   const boardId = req.body.boardId;
   const list = new List({
     _id: new mongoose.Types.ObjectId(),
-    name: req.body.name,
     text: req.body.text,
   });
   Board

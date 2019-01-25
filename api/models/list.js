@@ -5,7 +5,6 @@ const Card = require('../models/card')
 
 const ListSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  name: { type: String, required: true },
   text: { type: String, required: true },
   id: { type: String, required: true, index: { unique: true }, default: () => { return Math.random().toString(36).substring(2, 9) } },
   creationDate: { type: Date, default: Date.now },
@@ -16,7 +15,7 @@ const ListSchema = mongoose.Schema({
 ListSchema.methods.toJSON = function() {
   var list = this
   var listObject = list.toObject()
-  return _.pick(listObject, ['id', 'name', 'text', 'creationDate', 'userIdCreator', 'cards', 'orderId'])
+  return _.pick(listObject, ['id', 'text', 'creationDate', 'userIdCreator', 'cards', 'orderId'])
 }
 
 ListSchema.post('findOneAndRemove', function(doc) {

@@ -5,7 +5,6 @@ const Comment = require('../models/comment')
 
 const CardSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  name: { type: String },
   text: { type: String, required: true },
   id: { type: String, required: true, index: { unique: true }, default: () => { return Math.random().toString(36).substring(2, 9) } },
   creationDate: { type: Date, default: Date.now },

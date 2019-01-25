@@ -43,7 +43,6 @@ exports.readBoard = (req, res) => {
 exports.createBoard = (req, res) => {
   const board = new Board({
     _id: new mongoose.Types.ObjectId(),
-    name: req.body.name,
     text: req.body.text
   });
   board

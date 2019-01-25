@@ -26,7 +26,6 @@ exports.createCard = (req, res) => {
   const listId = req.body.listId;
   const card = new Card({
     _id: new mongoose.Types.ObjectId(),
-    name: req.body.name,
     text: req.body.text,
   });
   List
@@ -46,7 +45,6 @@ exports.createCard = (req, res) => {
 }
 
 /**
- * name
  * text
  * orderId
  * transfert list
